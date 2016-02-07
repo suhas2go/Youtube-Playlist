@@ -14,11 +14,12 @@ soup = BeautifulSoup(html_page,"html.parser")
 def filterit(href):
     return href and re.compile("watch").search(href)
 l=soup.findAll(href=filterit)
-
-from os import listdir
-from os.path import isfile, join
-mypath="C:/Users/Suhas/Dropbox/Public/Music/Songs"
-onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+lis=[]
+import os
+path="C:/Users/Suhas/Dropbox/Public/Music/Songs"
+filenames = next(os.walk(path))[2]
+for t in filenames:
+    lis.append((t.split('.',1)[0]))
 
 for link in l:
     url2="https://www.youtube.com/" + (link.get('href'))
@@ -26,8 +27,12 @@ for link in l:
     t=video.title
     if t not in Videolist:
         Videolist.append(t)
-        if t not in onlyfiles:
+        if t not in lis:
             print (t)
-            best=video.getbestaudio()
-            filename=best.download(filepath="C:/Users/Suhas/Dropbox/Public/Music/Songs",quiet=False)
+            try:
+                best=video.getbestaudio()
+                filename=best.download(filepath="C:/Users/Suhas/Dropbox/Public/Music/Songs",quiet=False)
+                print("Download Complete")
+            except IOError:
+                print("Error")
 pickle.dump(Videolist, open( "save.p", "wb" ) )
