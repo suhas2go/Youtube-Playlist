@@ -4,6 +4,17 @@ from  more_itertools import unique_everseen
 import urllib.request
 import re
 import pickle
+
+
+import sys
+import codecs
+if sys.stdout.encoding != 'utf8':
+  sys.stdout = codecs.getwriter('utf8')(sys.stdout.buffer, 'strict')
+if sys.stderr.encoding != 'utf8':
+  sys.stderr = codecs.getwriter('utf8')(sys.stderr.buffer, 'strict')
+
+
+
 try:
 	Videolist = pickle.load( open( "save.p", "rb" ) )
 except IOError:
@@ -16,7 +27,7 @@ def filterit(href):
 l=soup.findAll(href=filterit)
 lis=[]
 import os
-path="C:/Users/Suhas/Dropbox/Public/Music/Songs"
+path=u"C:/Users/Suhas/Dropbox/Public/Music/Songs"
 filenames = next(os.walk(path))[2]
 for t in filenames:
     lis.append((t.split('.',1)[0]))
